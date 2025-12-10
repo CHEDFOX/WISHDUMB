@@ -18,17 +18,17 @@ const personas = {
   buddha: {
     id: "buddha",
     name: "BUDDHA",
-    video: "public/avatars/buddha.webm",
+    video: "buddha.webm",
   },
   socrates: {
     id: "socrates",
     name: "SOCRATES",
-    video: "public/avatars/socrates.webm",
+    video: "socrates.webm",
   },
   nietzsche: {
     id: "nietzsche",
     name: "NEITZCHE",
-    video: "public/avatars/nietzsche.webm",
+    video: "/nietzsche.webm",
   },
 };
 
@@ -248,3 +248,4 @@ if (voiceToggle && voiceLabel && avatarCircle) {
 
 // Init default persona
 switchPersona("buddha");
+
