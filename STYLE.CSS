@@ -1,0 +1,987 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #18181b, #020617 60%);
+  color: #f4f4f5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+header {
+  border-bottom: 1px solid rgba(82, 82, 91, 0.7);
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #a1a1aa;
+}
+
+header .brand {
+  font-weight: 600;
+  color: #f4f4f5;
+}
+
+header nav {
+  display: flex;
+  gap: 28px;     /* nice space between TALK and ABOUT */
+}
+
+header nav a {
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: #e5e7eb;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+header nav a:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+}
+
+/* Landing */
+
+.landing-container {
+  text-align: center;
+  max-width: 32rem;
+}
+
+.landing-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.landing-text {
+  font-size: 0.95rem;
+  color: #a1a1aa;
+  margin-bottom: 1.5rem;
+}
+
+.button-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.6rem;
+  border-radius: 999px;
+  border: none;
+  background: #f4f4f5;
+  color: #020617;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.button-primary:hover {
+  background: #ffffff;
+}
+
+/* Talk page layout */
+
+body,
+.talk-root {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Inter", sans-serif;
+  background: #050608; /* slightly greyish, not pure black */
+  color: #f9fafb;
+}
+
+
+.talk-main {
+  flex-direction: column;
+  align-items: center;
+ gap: 1.5rem;
+}
+
+.avatar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.avatar-circle {
+  width: 280px;     /* was ~220–260 */
+  height: 280px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #000;
+  margin-bottom: 14px;
+}
+
+.avatar-circle video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+
+.avatar-circle.listening {
+  box-shadow: 0 0 45px rgba(52, 211, 153, 0.5);
+}
+
+.avatar-circle.speaking {
+  box-shadow: 0 0 60px rgba(250, 250, 250, 0.45);
+}
+
+.avatar-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.avatar-tagline {
+  font-size: 0.8rem;
+  color: #a1a1aa;
+}
+
+/* Persona switcher */
+
+.persona-switcher {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.persona-switcher button {
+  border-radius: 999px;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.7rem;
+  border: 1px solid #52525b;
+  background: rgba(24, 24, 27, 0.8);
+  color: #a1a1aa;
+  cursor: pointer;
+}
+
+.persona-switcher button.active {
+  border-color: #e4e4e7;
+  background: rgba(24, 24, 27, 0.95);
+  color: #f4f4f5;
+}
+
+/* Chat */
+
+
+/* Input row */
+
+.chat-container {
+  flex: 1;
+  width: 750px;                       /* ⬅️ increased width */
+  max-width: 90vw;     
+  
+  max-height: 340px;
+
+  /* stays responsive */
+  background: radial-gradient(circle at top left, #18181b, #02010a);
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.8);
+  padding: 20px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* rows */
+.chat-message-row {
+  display: flex;
+}
+
+.chat-message-row.user {
+  justify-content: flex-end;
+}
+
+.chat-message-row.assistant {
+  justify-content: flex-start;
+}
+
+/* bubbles */
+.chat-bubble {
+  max-width: 80%;
+  padding: 8px 12px;
+  border-radius: 14px;
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+.chat-bubble.user {
+  background: rgba(255, 255, 255, 0.14);
+  color: #f9fafb;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-bubble.assistant {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  color: #e5e7eb;
+  border-bottom-left-radius: 4px;
+}
+
+/* input row + send button */
+.chat-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.chat-input {
+  flex: 1;
+  border-radius: 999px;
+  padding: 12px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  font-size: 1rem;
+  outline: none;
+}
+
+
+.chat-input::placeholder {
+  color: rgba(148, 163, 184, 0.7);
+}
+
+.chat-input:focus {
+  border-color: rgba(248, 250, 252, 0.7);
+}
+
+/* send button ->O */
+.send-btn {
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(248, 250, 252, 0.6);
+  background: radial-gradient(circle at top left, #f9fafb, #d4d4d8);
+  color: #020617;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.8);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.send-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.95);
+}
+
+.send-btn:active {
+  transform: translateY(1px) scale(0.97);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.9);
+}
+
+.send-arrow {
+  font-size: 0.9rem;
+}
+
+.send-dot {
+  font-size: 0.78rem;
+}
+
+
+/* Voice mode */
+
+.voice-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.35rem;
+  font-size: 0.7rem;
+  color: #a1a1aa;
+}
+
+.voice-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid #52525b;
+  background: rgba(24, 24, 27, 0.9);
+  color: #a1a1aa;
+  cursor: pointer;
+}
+
+.voice-toggle.on {
+  border-color: #4ade80;
+  background: rgba(6, 78, 59, 0.6);
+  color: #bbf7d0;
+}
+
+.voice-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: #52525b;
+}
+
+.voice-toggle.on .voice-dot {
+  background: #4ade80;
+}
+
+/* About */
+
+.about-container {
+  max-width: 40rem;
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: #d4d4d8;
+}
+
+.about-container p {
+  margin-bottom: 0.75rem;
+}
+
+/* Make the avatar video fill the circle nicely and ignore mouse events */
+.avatar-circle video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* fills the circle with the face */
+  display: block;
+  background: #000;
+  pointer-events: none; /* so double-click doesn't trigger fullscreen/page */
+}
+
+.about-section {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.about-section h2 {
+  font-size: 32px;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.about-text {
+  font-size: 18px;
+  opacity: 0.8;
+  letter-spacing: 0.5px;
+}
+
+/* === COME CLOSER BUTTON ROCKET EFFECT === */
+
+.come-near-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(6px);
+  border-radius: 50px;
+  color: white;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+/* Rocket arrow */
+.come-near-btn .arrow {
+  font-size: 1.3rem;
+  font-weight: 300;
+  transition: transform 0.25s ease;
+  position: relative;
+  z-index: 3;
+}
+
+/* Text */
+.come-near-btn .btn-label {
+  display: inline-block;
+  transition:
+    transform 0.35s ease,
+    opacity 0.35s ease;
+  z-index: 3;
+}
+
+/* ---- ROCKET COMET TAIL ---- */
+.come-near-btn::before {
+  content: "";
+  position: absolute;
+  width: 70px;
+  height: 100%;
+  left: -80px;
+  top: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 200, 80, 0.55),
+    rgba(255, 130, 30, 0.3),
+    transparent
+  );
+  filter: blur(12px);
+  border-radius: 50px;
+  opacity: 0;
+  transition: transform 0.45s ease, opacity 0.45s ease;
+}
+
+/* ---- EMBER PARTICLES ---- */
+.come-near-btn::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: rgba(255, 180, 60, 0.9);
+  opacity: 0;
+  box-shadow: 
+    0 -12px 4px rgba(255,180,60,0.6),
+    0 12px 4px rgba(255,180,60,0.5),
+    0 -20px 5px rgba(255,200,80,0.4),
+    0 20px 5px rgba(255,200,80,0.35);
+  transition: opacity 0.25s ease;
+}
+
+/* ---- MAIN ANIMATION TRIGGER ---- */
+.come-near-btn.animating .arrow {
+  transform: translateX(14px);
+}
+
+.come-near-btn.animating .btn-label {
+  transform: translateX(120%);
+  opacity: 0;
+}
+
+/* Comet tail moves across */
+.come-near-btn.animating::before {
+  opacity: 1;
+  transform: translateX(260%);
+}
+
+/* Ember sparks appear briefly */
+.come-near-btn.animating::after {
+  opacity: 1;
+  animation: emberBurst 0.45s ease-out forwards;
+}
+
+/* Ember burst animation */
+@keyframes emberBurst {
+  0% {
+    transform: translateY(-50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-50%) scale(1.6);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-50%) scale(0.4);
+    opacity: 0;
+  }
+}
+
+/* === HOVER EFFECT (ONLY HOVER, NOT CLICK) === */
+.come-near-btn:hover {
+  border-color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 0 14px rgba(255, 200, 80, 0.25),
+    0 4px 22px rgba(0, 0, 0, 0.8);
+}
+
+.come-near-btn:hover .arrow {
+  transform: translateX(4px);
+}
+
+
+.send-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 52px;
+  min-width: 52px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: radial-gradient(circle at top left, rgba(255,255,255,0.12), rgba(0,0,0,0.9));
+  color: #f9fafb;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.send-btn:hover {
+  transform: translateY(-1px) scale(1.03);
+  border-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.15);
+}
+
+.send-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+  box-shadow: none;
+  transform: none;
+}
+
+.send-arrow {
+  font-size: 1rem;
+  transform: translateX(-1px);
+  transition: transform 0.2s ease;
+}
+
+.send-dot {
+  font-size: 0.95rem;
+}
+
+.send-btn:hover .send-arrow {
+  transform: translateX(3px);
+}
+
+.brand {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: linear-gradient(to right, #ffffff, #cccccc);
+  -webkit-background-clip: text;
+  color: transparent;
+  opacity: 0.9;
+}
+
+.avatar-circle {
+  margin-bottom: 14px;
+}
+
+.avatar-name {
+  margin-top: 0; /* not needed anymore */
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+
+.avatar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px; /* space between circle and name */
+}
+
+.center-indicator {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.7px;
+  color: #ffffff;
+  opacity: 0.9;
+  padding: 6px 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+}
+
+
+/* Persona selector row */
+.persona-switcher {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+/* Base style for all persona buttons */
+.persona-switcher button {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.05);
+  color: #f9fafb;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+/* Hover */
+.persona-switcher button:hover {
+  opacity: 1;
+}
+
+/* Active = bigger + slightly lifted, BUT still in normal flow */
+.persona-switcher button.active {
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.55);
+  transform: translateY(-4px) scale(1.12);
+  font-weight: 600;
+  opacity: 1;
+}
+
+/* Bounce animation when newly selected */
+@keyframes personaBounce {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  40% {
+    transform: translateY(-10px) scale(1.2);
+  }
+  100% {
+    transform: translateY(-4px) scale(1.12);
+  }
+}
+
+.persona-switcher button.just-selected {
+  animation: personaBounce 0.24s ease-out;
+}
+
+
+
+/* === FOOTER === */
+
+.site-footer {
+  width: 100%;
+  margin-top: 100px;
+  padding: 24px 0;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  opacity: 0.8;
+}
+
+.footer-tagline {
+  font-size: 0.85rem;
+  letter-spacing: 0.6px;
+  opacity: 0.75;
+}
+
+
+/* Avatar layout */
+.avatar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.avatar-circle {
+  width: 220px;   /* adjust as needed */
+  height: 220px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #000;
+}
+
+.avatar-circle video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Persona switcher: buttons + active center effect */
+.persona-switcher {
+  position: relative;
+  margin-top: 24px;
+  min-height: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.persona-switcher button {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.05);
+  color: #f9fafb;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: all 0.25s ease;
+  z-index: 1;
+}
+
+.persona-switcher button:hover {
+  opacity: 1;
+}
+
+/* Selected button moves to center and gets bigger */
+.persona-switcher button.active {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(-6px) scale(1.18);
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.55);
+  font-weight: 600;
+  opacity: 1;
+  z-index: 2;
+}
+
+/* Tiny bounce animation when just selected */
+@keyframes personaBounce {
+  0% {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  40% {
+    transform: translateX(-50%) translateY(-10px) scale(1.24);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-6px) scale(1.18);
+  }
+}
+
+.persona-switcher button.just-selected {
+  animation: personaBounce 0.26s ease-out;
+}
+
+
+/* === FINAL PERSONA BUTTON LAYOUT FIX === */
+
+.persona-switcher {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+/* base button style */
+.persona-switcher button {
+  position: relative !important;          /* override any absolute from before */
+  left: auto !important;
+  right: auto !important;
+  transform: none;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.05);
+  color: #f9fafb;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease,
+    opacity 0.2s ease;
+  z-index: 1;
+}
+
+.persona-switcher button:hover {
+  opacity: 1;
+}
+
+/* selected one: slightly bigger + lifted */
+.persona-switcher button.active {
+  position: relative !important;          /* kill old absolute positioning */
+  left: auto !important;
+  right: auto !important;
+  transform: translateY(-4px) scale(1.12);
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.55);
+  font-weight: 600;
+  opacity: 1;
+  z-index: 2;
+}
+
+/* little bounce when just selected */
+@keyframes personaBounce {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  40% {
+    transform: translateY(-10px) scale(1.2);
+  }
+  100% {
+    transform: translateY(-4px) scale(1.12);
+  }
+}
+
+.persona-switcher button.just-selected {
+  animation: personaBounce 0.24s ease-out;
+}
+
+/* === Persona Button Color Themes === */
+
+/* Base */
+.persona-switcher button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f1f1f1;
+  transition: 0.25s ease;
+}
+
+/* Active (bigger) button */
+.persona-switcher button.active {
+  transform: translateY(-4px) scale(1.15);
+  font-weight: 600;
+  color: white;
+}
+
+/* Buddha Theme */
+.persona-switcher button[data-persona-id="buddha"].active {
+ background: rgba(240, 180, 60, 0.25);
+border-color: rgba(240, 180, 60, 0.55);
+box-shadow: 0 0 14px rgba(240, 180, 60, 0.35);
+color: #F4CE70;
+
+
+}
+
+/* Socrates Theme */
+.persona-switcher button[data-persona-id="socrates"].active {
+background: rgba(65, 35, 20, 0.38);
+border-color: rgba(120, 70, 40, 0.6);
+box-shadow: 0 0 16px rgba(100, 55, 30, 0.42);
+color: #C89B7A;
+
+
+}
+
+/* Nietzsche Theme */
+.persona-switcher button[data-persona-id="nietzsche"].active {
+  background: rgba(165, 95, 255, 0.35);
+  border-color: rgba(165, 95, 255, 0.65);
+  box-shadow: 0 0 18px rgba(165, 95, 255, 0.4);
+}
+
+
+/* === Footer with Logo === */
+
+.site-footer {
+  width: 100%;
+  margin-top: 100px;
+  padding: 30px 0;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  opacity: 0.85;
+  display: flex;
+  justify-content: center;
+}
+
+.footer-brand-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-logo {
+  width: 55px;
+  height: auto;
+  opacity: 0.85;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.12));
+}
+
+.footer-tagline {
+  font-size: 0.82rem;
+  opacity: 0.75;
+  letter-spacing: 0.5px;
+}
+
+.brand {
+  font-size: 1.1rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.brand-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+/* Landing hero button */
+
+/* Landing hero button */
+
+.hero-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(248, 250, 252, 0.7);
+  background: radial-gradient(circle at top left, #f9fafb, #d4d4d8);
+  color: #020617;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.85);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  overflow: hidden;
+}
+
+.hero-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 44px rgba(0, 0, 0, 0.95);
+}
+
+.hero-btn:active {
+  transform: translateY(1px) scale(0.97);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.9);
+}
+
+.hero-label,
+.hero-arrow {
+  display: inline-block;
+}
+
+/* arrow moves immediately */
+.hero-arrow {
+  transition: transform 0.2s ease;
+}
+
+/* text moves with a slight delay */
+.hero-label {
+  transition:
+    transform 0.3s ease 0.15s,
+    opacity 0.3s ease 0.15s;
+}
+
+/* when pressed: arrow nudges first */
+.hero-btn.pressed .hero-arrow {
+  transform: translateX(8px);
+}
+
+/* then text slides out and fades after delay */
+.hero-btn.pressed .hero-label {
+  transform: translateX(140%);
+  opacity: 0;
+}
