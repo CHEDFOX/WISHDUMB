@@ -28,7 +28,7 @@ const personas = {
   nietzsche: {
     id: "nietzsche",
     name: "NEITZCHE",
-    video: "/nietzsche.webm",
+    video: "nietzsche.webm",
   },
 };
 
@@ -248,4 +248,5 @@ if (voiceToggle && voiceLabel && avatarCircle) {
 
 // Init default persona
 switchPersona("buddha");
+
 
