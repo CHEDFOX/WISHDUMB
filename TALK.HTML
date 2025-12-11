@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -63,3 +64,70 @@
     <script src="talk.js"></script>
   </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Talk · WISHDUMB</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="talk-root">
+    <header>
+<div class="brand">
+  <a href="talk.html" class="brand-link">WISHDUMB</a>
+</div>
+      <nav>
+        <a href="talk.html" class="active">Talk</a>
+        <a href="about.html">About</a>
+      </nav>
+    </header>
+
+    <main class="talk-main">
+      <!-- Avatar + persona info -->
+      <section class="avatar-wrapper">
+  <div id="avatarCircle" class="avatar-circle">
+    <video
+      id="avatarVideo"
+      autoplay
+      muted
+      loop
+      playsinline
+      src="avatars/buddha.webm"
+    ></video>
+  </div>
+</section>
+
+
+      <!-- Persona switcher -->
+      <section class="persona-switcher" id="personaSwitcher"></section>
+
+      <!-- Chat area -->
+      <section class="chat-container">
+        <div class="chat-messages" id="chatMessages"></div>
+
+        <div class="chat-input-row">
+          <input
+            id="chatInput"
+            class="chat-input"
+            type="text"
+            placeholder=""
+          />
+          <button id="sendButton" class="send-btn">
+            <span class="send-arrow">→</span><span class="send-dot">O</span>
+          </button>
+        </div>
+
+        <div class="voice-row">
+          <button id="voiceToggle" class="voice-toggle">
+            <span class="voice-dot"></span>
+            <p id="voiceLabel" class="voice-label">SAY</p>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <script src="talk.js"></script>
+  </body>
+</html>
+>>>>>>> 34704e88a735953e816e17c25c1e3f4975032293
