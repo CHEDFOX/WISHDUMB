@@ -16,19 +16,16 @@ const FloatingThought: React.FC<Props> = ({ thought }) => {
         opacity: thought.opacity,
         pointerEvents: "none",
         maxWidth: thought.kind === "question" ? "420px" : "560px",
-        zIndex: thought.kind === "response" ? 100 : 10,
+        zIndex: thought.centered ? 200 : 50,
       }}
       className="select-none"
     >
       <p
-        className={`
-          text-center italic tracking-wide leading-relaxed
-          ${
-            thought.kind === "question"
-              ? "text-xs text-white/40"
-              : "text-sm md:text-base text-white/80"
-          }
-        `}
+        className={
+          thought.kind === "question"
+            ? "text-xs text-white/40 italic text-center tracking-wide"
+            : "text-sm md:text-base text-white/80 italic text-center tracking-wide leading-relaxed"
+        }
       >
         {thought.text}
       </p>
