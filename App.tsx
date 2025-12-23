@@ -13,7 +13,12 @@ declare global {
   }
 }
 
-const CENTER_RADIUS = 160;
+/* ---------- CONSTANTS ---------- */
+
+const CENTER_RADIUS = 170;
+const EDGE_MARGIN = 120;
+const MAX_SPEED = 0.45;
+const DAMPING = 0.985;
 
 const App: React.FC = () => {
   const [scene, setScene] = useState(Scene.LANDING);
@@ -26,7 +31,7 @@ const App: React.FC = () => {
   const frameRef = useRef<number>();
   const recognitionRef = useRef<any>(null);
 
-  // ---------- SPEECH ----------
+  /* ---------- SPEECH ---------- */
 
   useEffect(() => {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -50,30 +55,23 @@ const App: React.FC = () => {
     setIsListening(!isListening);
   };
 
-  // ---------- HELPERS ----------
+  /* ---------- HELPERS ---------- */
 
   const center = () => ({
     x: window.innerWidth / 2,
     y: window.innerHeight / 2 - 40,
   });
 
-  const randomDirection = (speed: number) => {
+  const randomUnit = () => {
     const a = Math.random() * Math.PI * 2;
-    return { vx: Math.cos(a) * speed, vy: Math.sin(a) * speed };
+    return { x: Math.cos(a), y: Math.sin(a) };
   };
 
-  const outsideCenter = (x: number, y: number) => {
-    const c = center();
-    const dx = x - c.x;
-    const dy = y - c.y;
-    return Math.sqrt(dx * dx + dy * dy) > CENTER_RADIUS;
-  };
-
-  // ---------- SPAWN ----------
+  /* ---------- SPAWN ---------- */
 
   const spawnQuestion = (text: string): Thought => {
     const c = center();
-    const v = randomDirection(4.8);
+    const d = randomUnit();
 
     return {
       id: crypto.randomUUID(),
@@ -81,8 +79,8 @@ const App: React.FC = () => {
       kind: "question",
       x: c.x,
       y: c.y,
-      vx: v.vx,
-      vy: v.vy,
+      vx: d.x * 5,
+      vy: d.y * 5,
       createdAt: Date.now(),
       opacity: 0.6,
       scale: 0.9,
@@ -106,25 +104,27 @@ const App: React.FC = () => {
     };
   };
 
-  // ---------- INPUT ----------
+  /* ---------- INPUT ---------- */
 
-  const handleInput = async (
-    text: string,
-    mode: "text" | "voice"
-  ) => {
+  const handleInput = async (text: string, mode: "text" | "voice") => {
     if (!text.trim() || isProcessing) return;
 
     setIsProcessing(true);
     setInputText("");
 
-    // QUESTION exits screen
+    // Question exits
     thoughtsRef.current.unshift(spawnQuestion(text));
 
-    // OLD CENTERED RESPONSE → PUSH TO PERIPHERY
+    // Old centered response → de-center
     thoughtsRef.current = thoughtsRef.current.map((t) => {
       if (t.kind === "response" && t.centered) {
-        const v = randomDirection(1.2);
-        return { ...t, centered: false, vx: v.vx, vy: v.vy };
+        const d = randomUnit();
+        return {
+          ...t,
+          centered: false,
+          vx: d.x * 0.6,
+          vy: d.y * 0.6,
+        };
       }
       return t;
     });
@@ -133,11 +133,9 @@ const App: React.FC = () => {
 
     try {
       const response = await generateThought(text);
-
       thoughtsRef.current.unshift(
         spawnResponse(response || "…")
       );
-
       if (mode === "voice") await speakThought(response);
     } catch {
       thoughtsRef.current.unshift(
@@ -148,47 +146,74 @@ const App: React.FC = () => {
     }
   };
 
-  // ---------- ANIMATION ----------
+  /* ---------- ANIMATION ---------- */
 
   const animate = useCallback(() => {
     const now = Date.now();
     const c = center();
 
     thoughtsRef.current = thoughtsRef.current.filter((t) => {
+      // Integrate motion
       t.x += t.vx;
       t.y += t.vy;
 
-      if (t.kind === "question") {
-        t.opacity -= 0.035;
+      // Velocity damping (prevents escape)
+      t.vx *= DAMPING;
+      t.vy *= DAMPING;
+
+      // Cap speed
+      const speed = Math.hypot(t.vx, t.vy);
+      if (speed > MAX_SPEED) {
+        t.vx = (t.vx / speed) * MAX_SPEED;
+        t.vy = (t.vy / speed) * MAX_SPEED;
       }
 
-      if (t.kind === "response" && !t.centered) {
-        // repel from center
-        const dx = t.x - c.x;
-        const dy = t.y - c.y;
-        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      // QUESTIONS fade & leave
+      if (t.kind === "question") {
+        t.opacity -= 0.04;
+        return t.opacity > 0;
+      }
 
-        if (dist < CENTER_RADIUS) {
-          t.vx += (dx / dist) * 0.15;
-          t.vy += (dy / dist) * 0.15;
-        }
+      /* ----- RESPONSE PHYSICS ----- */
 
-        // gentle wandering
+      // Center exclusion (hard)
+      const dx = t.x - c.x;
+      const dy = t.y - c.y;
+      const dist = Math.hypot(dx, dy) || 1;
+
+      if (!t.centered && dist < CENTER_RADIUS) {
+        t.vx += (dx / dist) * 0.2;
+        t.vy += (dy / dist) * 0.2;
+      }
+
+      // Gentle wander
+      if (!t.centered) {
         t.vx += (Math.random() - 0.5) * 0.01;
         t.vy += (Math.random() - 0.5) * 0.01;
-
-        // age fade
-        const age = now - t.createdAt;
-        t.opacity = Math.max(0.4, 0.85 - age / 160000);
       }
 
-      const off =
-        t.x < -300 ||
-        t.x > window.innerWidth + 300 ||
-        t.y < -300 ||
-        t.y > window.innerHeight + 300;
+      // Edge containment (SOFT BOUNCE)
+      if (t.x < EDGE_MARGIN || t.x > window.innerWidth - EDGE_MARGIN) {
+        t.vx *= -0.8;
+        t.x = Math.max(
+          EDGE_MARGIN,
+          Math.min(window.innerWidth - EDGE_MARGIN, t.x)
+        );
+      }
 
-      return t.kind === "question" ? t.opacity > 0 && !off : true;
+      if (t.y < EDGE_MARGIN || t.y > window.innerHeight - EDGE_MARGIN) {
+        t.vy *= -0.8;
+        t.y = Math.max(
+          EDGE_MARGIN,
+          Math.min(window.innerHeight - EDGE_MARGIN, t.y)
+        );
+      }
+
+      // Aging fade
+      const age = now - t.createdAt;
+      t.opacity = Math.max(0.45, 0.85 - age / 180000);
+
+      return true;
     });
 
     thoughtsRef.current = thoughtsRef.current.slice(0, MAX_THOUGHTS);
@@ -203,7 +228,7 @@ const App: React.FC = () => {
     return () => frameRef.current && cancelAnimationFrame(frameRef.current);
   }, [scene, animate]);
 
-  // ---------- UI ----------
+  /* ---------- UI ---------- */
 
   return (
     <div className="relative w-full h-screen bg-black overflow-hidden text-white">
