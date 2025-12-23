@@ -4,27 +4,20 @@ export enum Scene {
   CHAT = "CHAT",
 }
 
+export type ThoughtKind = "question" | "response";
+
 export interface Thought {
   id: string;
   text: string;
+  kind: ThoughtKind;
 
-  // position (mutated via animation loop, not React)
   x: number;
   y: number;
 
-  // velocity
   vx: number;
   vy: number;
 
-  // lifecycle
   createdAt: number;
-  anchorTime: number;
-  phase: "emerging" | "settling" | "drifting";
-
-  // visual
   opacity: number;
   scale: number;
-
-  // input method
-  method: "voice" | "text";
 }
