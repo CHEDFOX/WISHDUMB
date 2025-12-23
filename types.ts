@@ -20,4 +20,7 @@ export interface Thought {
   createdAt: number;
   opacity: number;
   scale: number;
+
+  // response state
+  centered?: boolean;
 }
