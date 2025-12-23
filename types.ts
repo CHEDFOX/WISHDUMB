@@ -21,6 +21,5 @@ export interface Thought {
   opacity: number;
   scale: number;
 
-  // response state
   centered?: boolean;
 }
