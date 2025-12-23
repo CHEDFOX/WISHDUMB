@@ -1,0 +1,6 @@
+export const KEYS = {
+  OPENROUTER_API_KEY: import.meta.env.VITE_OPENROUTER_API_KEY,
+
+  ELEVENLABS_API_KEY: import.meta.env.VITE_ELEVENLABS_API_KEY,
+  ELEVENLABS_VOICE_ID: import.meta.env.VITE_ELEVENLABS_VOICE_ID,
+};
