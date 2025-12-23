@@ -1,0 +1,7 @@
+{
+  "name": "Aether: The Conscious Space",
+  "description": "An immersive, atmospheric chat experience where thoughts drift as floating memories in a cosmic void, powered by Gemini AI.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
